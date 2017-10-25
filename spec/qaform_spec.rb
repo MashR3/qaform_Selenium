@@ -14,29 +14,36 @@ describe 'qaform' do
     @driver.find_element(:name, 'firstname').displayed?
   end
 
-# R - G DONE
+# Checking that the text field with the name 'first name' is on the page somewhere
   it 'should have a text field for "first name"' do
     expect @driver.find_element(:name, 'firstname').displayed?
   end
 
-# R - G DONE
+# Send keys to the text field for 'firstname' and then check it returns the same value
   it 'will contain the value of the text added in "first name"' do
     @driver.find_element(:name, 'firstname').send_keys('Mash')
     expect(@driver.find_element(:name, 'firstname')['value']).to eq "Mash"
   end
 
+# Same as above, check the text entered for 'lastname' matches what it outputs
   it 'Finds and returns the entered last name' do
     @driver.find_element(:name, 'lastname').send_keys('Ash')
+    expect(@driver.find_element(:name, 'lastname')['value']).to eq "Ash"
   end
 
+# Check the button is seleted by first clicking it, then checking it is 'selected'
   it 'validates the male click' do
     @driver.find_element(:id, 'sex-0').click
+    expect(@driver.find_element(:id, 'sex-0').selected?).to be_equal(true)
   end
 
+# Check the button is seleted by first clicking it, then checking it is 'selected'
   it 'validates the female click' do
     @driver.find_element(:id, 'sex-1').click
+    expect(@driver.find_element(:id, 'sex-1').selected?).to be_equal(true)
   end
 
+# Same as the above buttons
   it 'Will select the correct year experience' do
     @driver.find_element(:id, 'exp-0').click
     expect(@driver.find_element(:id, 'exp-0').selected?).to be_equal(true)
@@ -60,11 +67,13 @@ describe 'qaform' do
     expect(@driver.find_element(:id, 'exp-6').selected?).to be_equal(true)
   end
 
+# Send keys to the date input box, and match what it actually contains with what was sent
   it 'will contain the value of the date added in "date" ' do
     @driver.find_element(:id, 'datepicker').send_keys('241017')
     expect(@driver.find_element(:id, 'datepicker')['value']).to eq '241017'
   end
 
+# Same as above buttons
   it 'will select the Manual Tester profession' do
     @driver.find_element(:id, 'profession-0').click
     expect(@driver.find_element(:id, 'profession-0').selected?).to be_equal(true)
@@ -73,15 +82,16 @@ describe 'qaform' do
     expect(@driver.find_element(:id, 'profession-1').selected?).to be_equal(true)
   end
 
+# Same as above buttons
   it 'will correctly select the automation tool' do
+    @driver.find_element(:id, 'tool-0').click
+    expect(@driver.find_element(:id, 'tool-0').selected?).to be_equal(true)
+
     @driver.find_element(:id, 'tool-1').click
     expect(@driver.find_element(:id, 'tool-1').selected?).to be_equal(true)
 
     @driver.find_element(:id, 'tool-2').click
     expect(@driver.find_element(:id, 'tool-2').selected?).to be_equal(true)
-
-    @driver.find_element(:id, 'tool-3').click
-    expect(@driver.find_element(:id, 'tool-3').selected?).to be_equal(true)
   end
 
   context 'Form should contain a link, and have a href target'
@@ -91,26 +101,24 @@ describe 'qaform' do
     expect(link.attribute("href")).to eq('http://toolsqa.wpengine.com/automation-practice-form/')
   end
 
-  it 'should have a working link test' do
-    expect(@driver.find_element(:link, 'Link Test').displayed?).to eq(true)
-    link = @driver.find_element(:link, 'Link Test')
-    expect(link.attribute("href")).to eq('http://toolsqa.wpengine.com/automation-practice-table/')
-  end
-
   it 'should have a "Selenium Automation Hybrid Framework" link that downloads a file' do
     expect(@driver.find_element(:link, 'Selenium Automation Hybrid Framework').displayed?).to eq(true)
   #   # link = @driver.find_element(:link, 'Selenium Automation Hybrid Framework')
   #   # expect(link.attribute("href")).to eq('http://toolsqa.wpengine.com/wp-content/uploads/2014/04/OnlineStore.zip')
   end
 
-  it 'should have a "Test File to Download"' do
-    expect(@driver.find_element(:link, 'Test File to Download').displayed?).to eq(true)
-  end
+# Ensuring file download link exists and checks the downloads folder to verify
+  context 'User has access to the test file, and it successfully downloads the .xlsx file' do
+    it 'should have a "Test File to Download"' do
+      expect(@driver.find_element(:link, 'Test File to Download').displayed?).to eq(true)
+    end
 
-  it 'should download the test file' do
-    x = @driver.find_element(:link, 'Test File to Download')
-    x.click
-    File.exists?('/Users/tech-a06/Downloads/Test-File-to-Download.xlsx')
+    it 'should download the test file' do
+      @driver.find_element(:link, 'Test File to Download').click
+      sleep 5
+      File.exists?('/Users/tech-a06/Downloads/Test-File-to-Download.xlsx')
+      sleep 5
+    end
   end
 
 # Module to support the select menu included. Select option in the list by actual text, and check it matches the actual string.
@@ -180,6 +188,13 @@ describe 'qaform' do
       last_name_contents = @driver.find_element(:name, 'lastname').text
       expect(first_name_contents).to eql ''
       expect(last_name_contents).to eql ''
+  end
+
+# Messing up the other tests potentially?
+  it 'should have a working link test' do
+    expect(@driver.find_element(:link, 'Link Test').displayed?).to eq(true)
+    link = @driver.find_element(:link, 'Link Test')
+    expect(link.attribute("href")).to eq('http://toolsqa.wpengine.com/automation-practice-table/')
   end
 
 
